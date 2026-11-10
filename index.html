@@ -1,0 +1,114 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arquivo Restrito</title>
+<style>
+body {
+  background: #080b09;
+  color: #d8e4d8;
+  font-family: monospace;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+}
+main {
+  width: 85%;
+  max-width: 500px;
+  padding: 30px;
+  border: 1px solid #42634a;
+  background: #040a06;
+  text-align: center;
+}
+h1 { letter-spacing: 4px; }
+input {
+  width: 90%;
+  padding: 14px;
+  background: #080e09;
+  border: 1px solid #42634a;
+  color: white;
+  font-size: 20px;
+  text-align: center;
+}
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 15px;
+  background: #315d3b;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+#mensagem { display: none; }
+#mensagem h1 { color: #ff5555; font-size: 36px; }
+#erro { color: #ff5555; }
+</style>
+</head>
+<body>
+<main>
+  <div id="acesso">
+    <p>ARQUIVO 002 — ACESSO RESTRITO</p>
+    <h1>IDENTIFICAÇÃO</h1>
+    <p>ESTE REGISTRO ESTÁ PROTEGIDO.</p>
+    <input id="codigo" type="password"
+      inputmode="numeric" maxlength="4"
+      placeholder="CÓDIGO DE ACESSO">
+    <button onclick="verificar()">ACESSAR ARQUIVO</button>
+    <p id="erro"></p>
+  </div>
+
+  <div id="mensagem">
+    <p>REGISTRO DESBLOQUEADO</p>
+    <h1>SALVE A MENINA.</h1>
+    <hr>
+    <p>Nem tudo precisa terminar como foi previsto.</p>
+    <p>Algumas escolhas ainda podem mudar o destino.</p>
+    <p id="contador"></p>
+  </div>
+</main>
+
+<script>
+const senha = "1458";
+let inicio = null;
+
+function verificar() {
+  const codigo = document.getElementById("codigo").value;
+
+  if (codigo === senha) {
+    document.getElementById("acesso").style.display = "none";
+    document.getElementById("mensagem").style.display = "block";
+
+    inicio = Date.now();
+    atualizarContador();
+    setInterval(atualizarContador, 1000);
+  } else {
+    document.getElementById("erro").textContent =
+      "CÓDIGO INCORRETO.";
+  }
+}
+
+function atualizarContador() {
+  const restante = 3600000 - (Date.now() - inicio);
+
+  if (restante <= 0) {
+    document.querySelector("main").innerHTML =
+      "<h1>ARQUIVO ENCERRADO</h1><p>REGISTRO INDISPONÍVEL.</p>";
+    return;
+  }
+
+  const minutos = Math.floor(restante / 60000);
+  const segundos = Math.floor((restante % 60000) / 1000);
+
+  document.getElementById("contador").textContent =
+    "TEMPO RESTANTE: " +
+    String(minutos).padStart(2, "0") + ":" +
+    String(segundos).padStart(2, "0");
+}
+</script>
+</body>
+</html>
